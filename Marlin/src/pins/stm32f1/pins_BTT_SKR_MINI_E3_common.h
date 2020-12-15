@@ -63,6 +63,13 @@
 #endif
 
 //
+// Power-loss Detection
+//
+#ifndef POWER_LOSS_PIN
+  #define POWER_LOSS_PIN                    PC12  // Power Loss Detection: PWR-DET
+#endif
+
+//
 // Steppers
 //
 #define X_ENABLE_PIN                        PB14
@@ -202,7 +209,6 @@
        *   EXP1-8 ----------- EXP1-3
        *   SPI1-1 ----------- EXP1-1
        *  EXP1-10 ----------- EXP1-7
-       *
        */
 
       #define TFTGLCD_CS                    PA9
@@ -245,7 +251,6 @@
    *   EXP1-8 ----------- EXP1-3
    *   SPI1-1 ----------- EXP1-1
    *  EXP1-10 ----------- EXP1-7
-   *
    */
 
   #define CLCD_SPI_BUS                         1  // SPI1 connector

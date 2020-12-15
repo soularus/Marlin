@@ -25,7 +25,7 @@
   #error "Oops! Select an STM32F1 board in 'Tools > Board.'"
 #endif
 
-#define BOARD_INFO_NAME "BTT SKR E3 DIP V1.0"
+#define BOARD_INFO_NAME "BTT SKR E3 DIP V1.x"
 
 // Release PB3/PB4 (TMC_SW Pins) from JTAG pins
 #define DISABLE_JTAG
@@ -257,7 +257,6 @@
    *   EXP1-8 ----------- EXP1-3
    *   SPI1-1 ----------- EXP1-1
    *  EXP1-10 ----------- EXP1-7
-   *
    */
 
   #define CLCD_SPI_BUS                         1  // SPI1 connector
@@ -265,7 +264,7 @@
   #define BEEPER_PIN                        PB6
 
   #define CLCD_MOD_RESET                    PA9
-  #define CLCD_SPI_CS                       PA8
+  #define CLCD_SPI_CS                       PB8
 
 #endif // TOUCH_UI_FTDI_EVE && LCD_FYSETC_TFT81050
 
