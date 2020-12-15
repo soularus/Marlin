@@ -66,7 +66,7 @@
 #include "stepper.h"
 #include "motion.h"
 #include "temperature.h"
-#include "../lcd/ultralcd.h"
+#include "../lcd/marlinui.h"
 #include "../gcode/parser.h"
 
 #include "../MarlinCore.h"
@@ -213,7 +213,7 @@ xyze_float_t Planner::previous_speed;
 float Planner::previous_nominal_speed_sqr;
 
 #if ENABLED(DISABLE_INACTIVE_EXTRUDER)
-  uint8_t Planner::g_uc_extruder_last_move[EXTRUDERS] = { 0 };
+  last_move_t Planner::g_uc_extruder_last_move[EXTRUDERS] = { 0 };
 #endif
 
 #ifdef XY_FREQUENCY_LIMIT
@@ -339,7 +339,6 @@ void Planner::init() {
      *  const uint32_t r = _BV(24) - x * d;                             // Estimate remainder
      *  if (r >= d) x++;                                                // Check whether to adjust result
      *  return uint32_t(x);                                             // x holds the proper estimation
-     *
      */
     static uint32_t get_period_inverse(uint32_t d) {
 
@@ -1766,14 +1765,15 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
   #endif
 
   /* <-- add a slash to enable
-    SERIAL_ECHOLNPAIR("  _populate_block FR:", fr_mm_s,
-                      " A:", target.a, " (", da, " steps)"
-                      " B:", target.b, " (", db, " steps)"
-                      " C:", target.c, " (", dc, " steps)"
-                      #if EXTRUDERS
-                        " E:", target.e, " (", de, " steps)"
-                      #endif
-                    );
+    SERIAL_ECHOLNPAIR(
+      "  _populate_block FR:", fr_mm_s,
+      " A:", target.a, " (", da, " steps)"
+      " B:", target.b, " (", db, " steps)"
+      " C:", target.c, " (", dc, " steps)"
+      #if EXTRUDERS
+        " E:", target.e, " (", de, " steps)"
+      #endif
+    );
   //*/
 
   #if EITHER(PREVENT_COLD_EXTRUSION, PREVENT_LENGTHY_EXTRUDE)
@@ -2038,22 +2038,20 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
       #if ENABLED(DISABLE_INACTIVE_EXTRUDER) // Enable only the selected extruder
 
         LOOP_L_N(i, EXTRUDERS)
-          if (g_uc_extruder_last_move[i] > 0) g_uc_extruder_last_move[i]--;
-
-        #if HAS_DUPLICATION_MODE
-          if (extruder_duplication_enabled && extruder == 0) {
-            ENABLE_AXIS_E1();
-            g_uc_extruder_last_move[1] = (BLOCK_BUFFER_SIZE) * 2;
-          }
-        #endif
+          if (g_uc_extruder_last_move[i]) g_uc_extruder_last_move[i]--;
 
         #define ENABLE_ONE_E(N) do{ \
           if (extruder == N) { \
             ENABLE_AXIS_E##N(); \
             g_uc_extruder_last_move[N] = (BLOCK_BUFFER_SIZE) * 2; \
+            if ((N) == 0 && TERN0(HAS_DUPLICATION_MODE, extruder_duplication_enabled)) \
+              ENABLE_AXIS_E1(); \
           } \
-          else if (!g_uc_extruder_last_move[N]) \
+          else if (!g_uc_extruder_last_move[N]) { \
             DISABLE_AXIS_E##N(); \
+            if ((N) == 0 && TERN0(HAS_DUPLICATION_MODE, extruder_duplication_enabled)) \
+              DISABLE_AXIS_E1(); \
+          } \
         }while(0);
 
       #else
@@ -2243,7 +2241,6 @@ bool Planner::_populate_block(block_t * const block, bool split_move,
       #define MAX_E_JERK(N) TERN(HAS_LINEAR_E_JERK, max_e_jerk[E_INDEX_N(N)], max_jerk.e)
 
       /**
-       *
        * Use LIN_ADVANCE for blocks if all these are true:
        *
        * esteps             : This is a print move, because we checked for A, B, C steps before.
