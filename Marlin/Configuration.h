@@ -492,9 +492,9 @@
     #define DEFAULT_Ki_LIST {   1.08,   1.08 }
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
   #else
-    #define DEFAULT_Kp 33.3922
-    #define DEFAULT_Ki  2.9748
-    #define DEFAULT_Kd 93.7070
+    #define DEFAULT_Kp 39.0984
+    #define DEFAULT_Ki  3.9960
+    #define DEFAULT_Kd 95.6395
   #endif
 #endif // PIDTEMP
 
@@ -736,7 +736,7 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 405.45, 99.48 }
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 405.45, 98.69 }
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -995,7 +995,7 @@
  *     O-- FRONT --+
  */
 //#define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
-#define NOZZLE_TO_PROBE_OFFSET { -20, -45, -6.210 }  //Microswitch Probe
+#define NOZZLE_TO_PROBE_OFFSET { -10, -42, -6.210 }  //Microswitch Probe
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
@@ -1005,7 +1005,7 @@
 #define XY_PROBE_SPEED (133*60)
 
 // Feedrate (mm/min) for the first approach when double-probing (MULTIPLE_PROBING == 2)
-#define Z_PROBE_SPEED_FAST (4*60)
+#define Z_PROBE_SPEED_FAST (7*60) //Default (4*60)
 
 // Feedrate (mm/min) for the "accurate" probe of each point
 #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
@@ -1065,7 +1065,7 @@
  */
 #define Z_CLEARANCE_DEPLOY_PROBE   7 // Z Clearance for Deploy/Stow
 #define Z_CLEARANCE_BETWEEN_PROBES 5 // Z Clearance between probe points
-#define Z_CLEARANCE_MULTI_PROBE    5 // Z Clearance between multiple probes
+#define Z_CLEARANCE_MULTI_PROBE    7 // Z Clearance between multiple probes
 //#define Z_AFTER_PROBING           5 // Z position after probing is done
 
 #define Z_PROBE_LOW_POINT          -4 // Farthest distance below the trigger-point to go before stopping
