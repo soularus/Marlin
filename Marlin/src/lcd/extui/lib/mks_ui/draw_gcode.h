@@ -21,6 +21,13 @@
  */
 #pragma once
 
-#if defined(USBD_USE_CDC_MSC) && DISABLED(NO_SD_HOST_DRIVE)
-  #define HAS_SD_HOST_DRIVE 1
+#ifdef __cplusplus
+  extern "C" { /* C-declarations for C++ */
+#endif
+
+extern void lv_draw_gcode(bool clear = false);
+extern void lv_clear_gcode();
+
+#ifdef __cplusplus
+  } /* C-declarations for C++ */
 #endif
