@@ -50,4 +50,3 @@
 
 class __FlashStringHelper;
 typedef const __FlashStringHelper *progmem_str;
-extern const char G28_STR[];

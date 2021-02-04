@@ -25,7 +25,6 @@
 #if HAS_GRAPHICAL_TFT
 
 #include "tft_image.h"
-#include "ui_common.h"
 
 const tImage NoLogo                 = { nullptr, 0, 0, NOCOLORS };
 
