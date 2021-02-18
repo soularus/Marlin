@@ -496,9 +496,14 @@
     #define DEFAULT_Ki_LIST {   1.08,   1.08 }
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
   #else
+  /* DEFAULTS
     #define DEFAULT_Kp 38.8313
     #define DEFAULT_Ki  3.8137
     #define DEFAULT_Kd 98.8450
+  */
+    #define DEFAULT_Kp 26.771
+    #define DEFAULT_Ki  2.2560
+    #define DEFAULT_Kd 79.4197
   #endif
 #endif // PIDTEMP
 
@@ -1175,12 +1180,12 @@
 #define Y_BED_SIZE 200
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
-#define X_MIN_POS -12
+#define X_MIN_POS -15
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 180
+#define Z_MAX_POS 150
 
 /**
  * Software Endstops
@@ -1657,7 +1662,7 @@
 
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z_raise }
-  #define NOZZLE_PARK_POINT { (X_MIN_POS + 10), (Y_MAX_POS - 10), 20 }
+  #define NOZZLE_PARK_POINT { (X_MIN_POS + 10), (Y_MIN_POS + 10), 20 }
   //#define NOZZLE_PARK_X_ONLY          // X move only is required to park
   //#define NOZZLE_PARK_Y_ONLY          // Y move only is required to park
   #define NOZZLE_PARK_Z_RAISE_MIN   2   // (mm) Always raise Z by at least this distance
