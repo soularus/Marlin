@@ -1,6 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+ * Copyright (c) 2021 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -21,43 +21,39 @@
  */
 
 /**
- * anycubic_i3mega_lcd.cpp
+ * lcd/extui/nextion_lcd.cpp
+ *
+ * Nextion TFT support for Marlin
  */
 
 #include "../../inc/MarlinConfigPre.h"
 
-#if ENABLED(ANYCUBIC_LCD_I3MEGA)
+#if ENABLED(NEXTION_TFT)
 
-#include "lib/anycubic_i3mega/anycubic_i3mega_lcd.h"
 #include "ui_api.h"
-
-#include <Arduino.h>    // for the ::tone() call
+#include "lib/nextion/nextion_tft.h"
 
 namespace ExtUI {
 
-  void onStartup()        { AnycubicTFT.OnSetup(); }
-  void onIdle()           { AnycubicTFT.OnCommandScan(); }
-  void onPrinterKilled(PGM_P const error, PGM_P const component) { AnycubicTFT.OnKillTFT(); }
-  void onMediaInserted()  { AnycubicTFT.OnSDCardStateChange(true); }
-  void onMediaError()     { AnycubicTFT.OnSDCardError(); }
-  void onMediaRemoved()   { AnycubicTFT.OnSDCardStateChange(false); }
-  void onPlayTone(const uint16_t frequency, const uint16_t duration) {
-    #if ENABLED(SPEAKER)
-      ::tone(BEEPER_PIN, frequency, duration);
-    #endif
-  }
-  void onPrintTimerStarted()  { AnycubicTFT.OnPrintTimerStarted(); }
-  void onPrintTimerPaused()   { AnycubicTFT.OnPrintTimerPaused(); }
-  void onPrintTimerStopped()  { AnycubicTFT.OnPrintTimerStopped(); }
-  void onFilamentRunout(const extruder_t extruder)   { AnycubicTFT.OnFilamentRunout(); }
-  void onUserConfirmRequired(const char * const msg) { AnycubicTFT.OnUserConfirmRequired(msg); }
-  void onStatusChanged(const char * const msg) {}
+  void onStartup()                                   { nextion.Startup();  }
+  void onIdle()                                      { nextion.IdleLoop(); }
+  void onPrinterKilled(PGM_P const error, PGM_P const component) { nextion.PrinterKilled(error,component); }
+  void onMediaInserted() {}
+  void onMediaError()    {}
+  void onMediaRemoved()  {}
+  void onPlayTone(const uint16_t frequency, const uint16_t duration) {}
+  void onPrintTimerStarted() {}
+  void onPrintTimerPaused()  {}
+  void onPrintTimerStopped() {}
+  void onFilamentRunout(const extruder_t)            {}
+  void onUserConfirmRequired(const char * const msg) { nextion.ConfirmationRequest(msg); }
+  void onStatusChanged(const char * const msg)       { nextion.StatusChange(msg);        }
 
-  void onHomingStart() {}
+  void onHomingStart()    {}
   void onHomingComplete() {}
-  void onPrintFinished() {}
+  void onPrintFinished()                             { nextion.PrintFinished(); }
 
-  void onFactoryReset() {}
+  void onFactoryReset()   {}
 
   void onStoreSettings(char *buff) {
     // Called when saving to EEPROM (i.e. M500). If the ExtUI needs
@@ -65,7 +61,7 @@ namespace ExtUI {
     // into buff.
 
     // Example:
-    //  static_assert(sizeof(myDataStruct) <= eeprom_data_size);
+    //  static_assert(sizeof(myDataStruct) <= ExtUI::eeprom_data_size);
     //  memcpy(buff, &myDataStruct, sizeof(myDataStruct));
   }
 
@@ -75,7 +71,7 @@ namespace ExtUI {
     // from buff
 
     // Example:
-    //  static_assert(sizeof(myDataStruct) <= eeprom_data_size);
+    //  static_assert(sizeof(myDataStruct) <= ExtUI::eeprom_data_size);
     //  memcpy(&myDataStruct, buff, sizeof(myDataStruct));
   }
 
@@ -90,11 +86,14 @@ namespace ExtUI {
   }
 
   #if HAS_MESH
-
     void onMeshLevelingStart() {}
 
-    void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float &zval) {
+    void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval) {
       // Called when any mesh points are updated
+    }
+
+    void onMeshUpdate(const int8_t xpos, const int8_t ypos, const ExtUI::probe_state_t state) {
+      // Called to indicate a special condition
     }
   #endif
 
@@ -107,6 +106,7 @@ namespace ExtUI {
   #if HAS_PID_HEATING
     void onPidTuning(const result_t rst) {
       // Called for temperature PID tuning result
+      nextion.PanelInfo(37);
     }
   #endif
 
@@ -114,4 +114,4 @@ namespace ExtUI {
   void onSteppersEnabled()  {}
 }
 
-#endif // ANYCUBIC_LCD_I3MEGA
+#endif // NEXTION_TFT
