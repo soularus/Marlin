@@ -1071,7 +1071,7 @@
 //#define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
 //#define NOZZLE_TO_PROBE_OFFSET { -10, -42, -5.01 }  //Microswitch Probe
 //#define NOZZLE_TO_PROBE_OFFSET { -5, -40, 0 }       //PartCooler+BLTouchMount
-#define NOZZLE_TO_PROBE_OFFSET { 31, -39, 0 }         //ReDuplicator Hemera Bltouch
+#define NOZZLE_TO_PROBE_OFFSET { 0, -35, 0 }         //ReDuplicator Hemera Bltouch
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
