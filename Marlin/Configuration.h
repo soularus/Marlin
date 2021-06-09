@@ -566,9 +566,9 @@
     #define DEFAULT_Ki  3.8137
     #define DEFAULT_Kd 98.8450
   */
-    #define DEFAULT_Kp 26.771
-    #define DEFAULT_Ki  2.2560
-    #define DEFAULT_Kd 79.4197
+    #define DEFAULT_Kp 30.6280
+    #define DEFAULT_Ki  2.8678
+    #define DEFAULT_Kd 81.7768
   #endif
 #endif // PIDTEMP
 
@@ -1192,7 +1192,7 @@
  * A total of 2 does fast/slow probes with a weighted average.
  * A total of 3 or more adds more slow probes, taking the average.
  */
-#define MULTIPLE_PROBING 2
+//#define MULTIPLE_PROBING 2
 //#define EXTRA_PROBING    1
 
 /**
